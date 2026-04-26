@@ -37,41 +37,10 @@
         </div>
         <div ref="aspect" class="player-aspect" />
       </div>
-      <ul v-if="!fullscreen && !hideControls" class="video-menu top">
-        <li><i @click.stop.prevent="requestFullscreen" class="fas fa-expand"></i></li>
-        <li v-if="admin"><i @click.stop.prevent="openResolution" class="fas fa-desktop"></i></li>
-        <li v-if="!controlLocked && !implicitHosting" :class="extraControls || 'extra-control'">
-          <i
-            :class="[
-              hosted && !hosting ? 'disabled' : '',
-              !hosted && !hosting ? 'faded' : '',
-              'fas',
-              'fa-computer-mouse',
-            ]"
-            @click.stop.prevent="toggleControl"
-          />
-        </li>
-      </ul>
-      <ul v-if="!fullscreen && !hideControls" class="video-menu bottom">
-        <li v-if="hosting && (!clipboard_read_available || !clipboard_write_available)">
-          <i @click.stop.prevent="openClipboard" class="fas fa-clipboard"></i>
-        </li>
-        <li>
-          <i
-            v-if="pip_available"
-            @click.stop.prevent="requestPictureInPicture"
-            v-tooltip="{ content: 'Picture-in-Picture', placement: 'left', offset: 5, boundariesElement: 'body' }"
-            class="fas fa-external-link-alt"
-          />
-        </li>
-        <li
-          v-if="hosting && is_touch_device"
-          :class="extraControls || 'extra-control'"
-          @click.stop.prevent="openMobileKeyboard"
-        >
-          <i class="fas fa-keyboard" />
-        </li>
-      </ul>
+      <!-- macos-web integration: .video-menu overlays removed. Their functionality
+           (fullscreen, pointer lock toggle, PiP, mobile keyboard, clipboard shim,
+           resolution picker) is either provided by the outer Safari window or
+           unused in our embedded kiosk scenario. -->
       <neko-resolution ref="resolution" v-if="admin" />
       <neko-clipboard ref="clipboard" v-if="hosting && (!clipboard_read_available || !clipboard_write_available)" />
     </div>
