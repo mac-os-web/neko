@@ -23,7 +23,13 @@
 </template>
 
 <style lang="scss" scoped>
+  /* macos-web integration: 부모(macos-web) 가 자체 로딩 화면을 그림.
+     모달 UI 는 숨기되 컴포넌트 자체는 mount → autoPassword 자동 로그인 로직 유지. */
   .connect {
+    display: none !important;
+  }
+
+  .connect-disabled {
     position: fixed;
     top: 0;
     left: 0;

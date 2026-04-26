@@ -237,6 +237,15 @@
       }
     }
 
+    // macos-web integration: 부모 창에 연결 상태를 알림.
+    // 우리 NekoViewport 가 이 메시지를 받아 자체 로딩 오버레이를 숨김.
+    @Watch('connected', { immediate: true })
+    onConnectedChanged(connected: boolean) {
+      if (connected && window.parent !== window) {
+        window.parent.postMessage({ type: 'macos-web/neko/connected' }, '*')
+      }
+    }
+
     @Watch('side')
     onSide(side: boolean) {
       if (side) {

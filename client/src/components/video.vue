@@ -1,5 +1,11 @@
 <template>
-  <div ref="component" class="video">
+  <!--
+    macos-web integration: mousedown 캡처해 부모(macos-web)에 postMessage 전달.
+    cross-origin iframe 안 이벤트는 부모로 자동 버블링 안 되므로, 클릭 시 부모가
+    포커스(Safari 창 활성화)를 처리할 수 있도록 신호만 보냄.
+    capture 단계에서 처리해 자식의 stopPropagation 영향 받지 않음.
+  -->
+  <div ref="component" class="video" @mousedown.capture="notifyParentInteraction">
     <div ref="player" class="player">
       <div ref="container" class="player-container">
         <video ref="video" playsinline />
@@ -594,6 +600,14 @@
         this.$accessor.video.play()
       } else {
         this.$accessor.video.pause()
+      }
+    }
+
+    // macos-web integration: 부모 창에 사용자 클릭 신호 전달.
+    // 부모는 이를 받아 Safari 윈도우를 active 로 만듦 (cross-origin iframe 우회).
+    notifyParentInteraction() {
+      if (window.parent !== window) {
+        window.parent.postMessage({ type: 'macos-web/neko/interaction' }, '*')
       }
     }
 
