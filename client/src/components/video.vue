@@ -395,6 +395,16 @@
       }
     }
 
+    // macos-web integration: 방문자가 별도 버튼 클릭 없이 자동으로 호스트 권한을 획득.
+    // 방마다 1명의 방문자만 들어오므로 (neko-rooms 격리), 다른 호스트와의 충돌은 발생 X.
+    // .video-menu 의 toggleControl 버튼을 제거했기 때문에 이 자동 클레임이 컨트롤의 유일한 진입점.
+    @Watch('playable')
+    onPlayableChanged(playable: boolean) {
+      if (playable && !this.hosting) {
+        this.$accessor.remote.toggle()
+      }
+    }
+
     @Watch('playing')
     async onPlayingChanged(playing: boolean) {
       if (this._video && this._video.paused && playing) {
